@@ -1,6 +1,4 @@
-import pickle
 from joblib import dump, load
-import json
 #from django.shortcuts import render
 from flask import Flask, request, app, jsonify, url_for, render_template
 import numpy as np
