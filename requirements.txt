@@ -1,5 +1,7 @@
-Flask
+flask
 scikit_learn
 pandas
 numpy
 matplotlib
+seaborn
+joblib
