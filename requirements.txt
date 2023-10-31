@@ -8,4 +8,5 @@ joblib
 gunicorn
 nltk
 notebook
+dill
 -e .
