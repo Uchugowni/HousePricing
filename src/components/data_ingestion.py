@@ -47,7 +47,7 @@ if __name__=="__main__":
     train_data, test_data = obj.initiate_data_ingestion()
     
     data_transaformation = DataTransformation()
-    train_arr,test_arr,_= data_transaformation.initiate_data_transaformation(train_data, test_data)
+    train_arr,test_arr= data_transaformation.initiate_data_transaformation(train_data, test_data)
 
     model_trainer = ModelTrainer()
     print(model_trainer.initiate_model_trainer(train_arr, test_arr))

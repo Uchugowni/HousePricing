@@ -42,13 +42,15 @@ class ModelTrainer:
 
             model_report: dict = evaluate_models(x_train=X_train, y_train=Y_train, x_test=X_test, y_test=Y_test, models=Models)
 
+            print(model_report)
+
             best_model_score = max(sorted(model_report.values()))
             best_model_name = list(model_report.keys())[list(model_report.values()).index(best_model_score)]
             best_model = Models[best_model_name]
 
             if best_model_score<0.6:
                 raise CustomException("No Best model found")
-            logging.info(f"Best found model on both traing and test dataset")
+            logging.info(f"Best found model {best_model} on both traing and test dataset")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,

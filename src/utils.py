@@ -31,6 +31,7 @@ def evaluate_models(x_train, y_train, x_test, y_test, models):
 
             train_model_r2_score = r2_score(y_train, Y_train_pred)
             test_model_r2_score = r2_score(y_test, Y_test_pred)
+            logging.info(f"modela name --> {model} trann-r2-score {train_model_r2_score} and test_model_r2_score {test_model_r2_score}")
 
             report[list(models.keys())[i]]=test_model_r2_score
         return report
