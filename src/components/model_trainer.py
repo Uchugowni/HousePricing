@@ -40,7 +40,45 @@ class ModelTrainer:
                 "AdaBoostRegressor": AdaBoostRegressor()
             }
 
-            model_report: dict = evaluate_models(x_train=X_train, y_train=Y_train, x_test=X_test, y_test=Y_test, models=Models)
+            params = {
+                "Random Forest" : {
+                    'n_estimators':[8, 16, 32, 64, 128, 256]
+                    #criterion, max_depth, min_samples_leaf
+                    },
+                "Decision Tree" : {
+                    'criterion' : ['squared_error', 'friedman_mse', 'absolute_error', 'poisson']
+                    #splitter, max_depth, min_samples_leaf, max_features  
+                    },
+                "Gredient Boosting" : {
+                    #'loss':['squared_error', 'absolute_error', 'huber', 'quantile']
+                    'learning_rate' : [.1, .01, .05, .001],
+                    'subsample' : [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
+                    #criterion, max_features, max_depth, min_samples_leaf
+                    'n_estimators' : [8, 16, 32, 64, 128, 256]
+                    },
+                "Linear Regression" : {},
+                "K-Neighbors": {
+                    'n_neighbors' : [5, 7, 9, 11]
+                    #weights, leaf_size, p, metric
+                    },
+                "XGB Regression": {
+                    'learning_rate' : [.1, .01, .05, .001],
+                    'n_estimators' : [8, 16, 32, 64, 128, 256]
+                    #n_estimators, random_state, n_jobs, max_depth, learning_rate
+                    },
+                "CatBoostRegressor": {
+                    'depth' : [6, 8, 10],
+                    'learning_rate' : [0.01, 0.05, 0.1],
+                    'iterations' : [30, 50, 100]
+                    #iterations, learning_rate, loss_function, max_depth, n_estimators, random_state, depth
+                    },
+                "AdaBoostRegressor": {
+                    'learning_rate' : [.1, .01, .05, .001],
+                    'n_estimators' : [8, 16, 32, 64, 128, 256]
+                    #n_estimators, learning_rate, loss, random_state, 
+                }
+            }
+            model_report: dict = evaluate_models(x_train=X_train, y_train=Y_train, x_test=X_test, y_test=Y_test, models=Models, param=params)
 
             print(model_report)
 
