@@ -7,7 +7,7 @@ from src.exception import CustomException
 from src.logger import logging
 import dill
 from sklearn.metrics import r2_score
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 
 
 def save_object(file_path, obj):
@@ -20,6 +20,15 @@ def save_object(file_path, obj):
             
     except Exception as e:
         raise CustomException(e, sys)
+    
+def load_object(file_path):
+    try:
+        with open(file_path, "rb") as file_obj:
+            return pickle.load(file_obj)
+        
+    except Exception as e:
+        raise CustomException(e, sys)
+    
     
 def evaluate_models(x_train, y_train, x_test, y_test, models, param):
     try:
@@ -46,11 +55,17 @@ def evaluate_models(x_train, y_train, x_test, y_test, models, param):
     except Exception as e:
         raise CustomException(e, sys)
     
-def evaluate_model(x_train, y_train, x_test, y_test, models):
+def evaluate_model(x_train, y_train, x_test, y_test, models, param):
     try:
         report = {}
         for i in range(len(models)):
             model = list(models.values())[i]
+
+            para = param[list(models.keys())[i]]
+            gscv = GridSearchCV(estimator=model, param_grid=para, cv=3)
+            gscv.fit(x_train, y_train)
+            model.set_params(**gscv.best_params_)
+
 
             model.fit(x_train, y_train)
 
@@ -67,14 +82,20 @@ def evaluate_model(x_train, y_train, x_test, y_test, models):
     except Exception as e:
         raise CustomException(e, sys)
 
+def dump_dfile(filepath, obj):
+    try:
+        dir_path = os.path.dirname(filepath)
+        os.makedirs(dir_path, exist_ok=True)
 
-def load_object(file_path):
+        with open(filepath, "wb") as file_obj:
+            dill.dump(obj, filepath)
+
+    except Exception as e:
+        raise CustomException (e, sys) 
+
+def load_pfile(file_path):
     try:
         with open(file_path, "rb") as file_obj:
             return pickle.load(file_obj)
-        
     except Exception as e:
-        raise CustomException(e, sys)
-
-
-
+        raise CustomException(e, sys) 

@@ -1,0 +1,33 @@
+Data Ingestion: 
+You have data in csv file and you know the dependent and Independent features
+read_csv file and store like raw data using path 
+Split train and test data with train_test_split methos (now only row data splitd)
+store train_data and test_data files in dirname throw return 
+
+
+Data Transformation: 
+read train_data and test_data csv file and split dependent and independent feature split 
+Once split get preprocessing obj (scaler, oneHot, Imputer -> def all with pipeline, columns and CloumnTransformer with num, cat)
+fit and transform preprocessor with train and test ---> store with array features 
+save_object file as preprocesser.pkl file (preprocessor_obj)
+Combined independent and dependent features in train and test array file and return both 
+
+Model_Training 
+read train and test array and split data = (X, Y, X, Y)
+Get required models and do for loop and fit and predict and store all values with dictonary format 
+now filter high model score based on that get best model name 
+Store best model in model pkl
+again predict with test data and check accuracy and r2 score and return value
+
+
+Predicted Pipeline
+load preprocess and model pkl obj file
+preprocesser transform and model predict with newdata(features)
+get data columns and set with data type and store self variable 
+match all columns with key : values format return Dataframe
+
+Application.python
+@Application annotation and Application form name store with methods 
+get Dataframe in pipeline match with request form and store like customdata
+Perfom prediction with newdata(features) and return result in .html
+
