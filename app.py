@@ -6,7 +6,6 @@ from flask import Flask, request, app, jsonify, url_for, render_template
 import numpy as np
 import pandas as pd
 #from waitress import serve
-from src.prac2.predict_pipe import Custom_Data, prediction_pipeline
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
 
@@ -36,8 +35,8 @@ def predict():
     lr_output= lrmodel.predict(sc_data)[0]
     return render_template("home.html", prediction_text="House Price is {}".format(lr_output))
     
-@app.route('/predictdata1', methods = ['GET', 'POST'])
-def predict_datapoint1():
+@app.route('/predictdata', methods = ['GET', 'POST'])
+def predict_datapoint():
     if request.method == 'GET':
         return render_template('index.html')
     else:
@@ -55,26 +54,6 @@ def predict_datapoint1():
         result = predpipeline.predict(pred_df)
         return render_template('index.html', results = result)
     
-@app.route('/predictdata', methods = ['GET', 'POST'])
-def predict_datapoint():
-    if request.method == 'GET':
-        return render_template('index.html')
-    else:
-        data = Custom_Data(
-            gender = request.form.get('gender'),
-            race_ethnicity = request.form.get('ethnicity'),
-            parental_level_of_education = request.form.get('parental_level_of_education'),
-            lunch = request.form.get('lunch'),
-            test_preparation_course = request.form.get('test_preparation_course'),
-            reading_score = request.form.get('reading_score'),
-            writing_score = request.form.get('writing_score')
-        )
-        new_pred_df = data.get_data_as_data_frame()
-        p_pipe = prediction_pipeline()
-        result = p_pipe.newdata_prediction(new_pred_df)
-        return render_template('index.html', results = result)
-
-
 
 if __name__=="__main__":
     app.run(debug=True)
