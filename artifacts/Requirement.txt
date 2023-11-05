@@ -23,7 +23,7 @@ again predict with test data and check accuracy and r2 score and return value
 Predicted Pipeline
 load preprocess and model pkl obj file
 preprocesser transform and model predict with newdata(features)
-get data columns and set with data type and store self variable 
+get data columns and set with data type and store self variable as front end app format
 match all columns with key : values format return Dataframe
 
 Application.python
