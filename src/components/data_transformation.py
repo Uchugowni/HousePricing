@@ -17,6 +17,18 @@ from src.utils import save_object
 @dataclass
 class DataTransformationConfig:
     preprocessor_obj_file_path = os.path.join('artifacts', "preprocessor.pkl")
+    num_colums = ["writing_score", "reading_score"]
+    cat_colums = [
+                "gender",
+                "race_ethnicity",
+                "parental_level_of_education",
+                "lunch",
+                "test_preparation_course"
+                ]
+    target_column_name = "math_score"
+    GT_num_colums = ["carat", "depth", "table", "x", "y", "z"]
+    GT_cat_colums = ["cut", "color", "clarity"]
+    GT_target_column_name ="price"
 
 class DataTransformation:
     def __init__(self):
@@ -24,14 +36,8 @@ class DataTransformation:
 
     def get_data_transformation_object(self):
         try:
-            numerical_columns = ["writing_score", "reading_score"]
-            catgorical_columns = [
-                "gender",
-                "race_ethnicity",
-                "parental_level_of_education",
-                "lunch",
-                "test_preparation_course"
-                ]
+            numerical_columns = self.data_transformation_config.num_colums
+            catgorical_columns = self.data_transformation_config.cat_colums
             
             num_pipeline = Pipeline(steps=[
                 ("imputer", SimpleImputer(strategy="median")),
@@ -58,6 +64,7 @@ class DataTransformation:
             return preprocessor
         
         except Exception as e:
+            logging.info('Exception Occured while preprocessing object')
             raise CustomException(e, sys)    
     
     def initiate_data_transaformation(self, train_path, test_path):
@@ -70,13 +77,11 @@ class DataTransformation:
 
             preprocessing_obj = self.get_data_transformation_object()
 
-            target_column_name = "math_score"
+            input_feature_train_df = train_df.drop(columns=[self.data_transformation_config.target_column_name], axis=1)
+            target_feature_train_df=train_df[self.data_transformation_config.target_column_name]
 
-            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
-            target_feature_train_df=train_df[target_column_name]
-
-            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)
-            target_feature_test_df = test_df[target_column_name]
+            input_feature_test_df = test_df.drop(columns=[self.data_transformation_config.target_column_name], axis=1)
+            target_feature_test_df = test_df[self.data_transformation_config.target_column_name]
 
             logging.info(f"Applying preprocessing object on traing dataframe and testing dataframe")
 
@@ -99,6 +104,7 @@ class DataTransformation:
         
 
         except Exception as e:
+            logging.info('Exception Occured while transformation to array')
             raise CustomException(e, sys)
 
 

@@ -6,8 +6,9 @@ import pandas as pd
 from src.exception import CustomException
 from src.logger import logging
 import dill
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
 
 
 def save_object(file_path, obj):
@@ -19,6 +20,7 @@ def save_object(file_path, obj):
             dill.dump(obj, file_obj)
             
     except Exception as e:
+        logging.info('Exception Occured while save object')
         raise CustomException(e, sys)
     
 def load_object(file_path):
@@ -27,6 +29,7 @@ def load_object(file_path):
             return pickle.load(file_obj)
         
     except Exception as e:
+        logging.info('Exception Occured while load object')
         raise CustomException(e, sys)
     
     
@@ -53,6 +56,7 @@ def evaluate_models(x_train, y_train, x_test, y_test, models, param):
         return report
     
     except Exception as e:
+        logging.info('Exception Occured while evaluating model')
         raise CustomException(e, sys)
     
 def evaluate_model(x_train, y_train, x_test, y_test, models, param):
@@ -80,22 +84,17 @@ def evaluate_model(x_train, y_train, x_test, y_test, models, param):
         return report
     
     except Exception as e:
+        logging.info('Exception Occured while evaluating model')
         raise CustomException(e, sys)
+    
 
-def dump_dfile(filepath, obj):
-    try:
-        dir_path = os.path.dirname(filepath)
-        os.makedirs(dir_path, exist_ok=True)
-
-        with open(filepath, "wb") as file_obj:
-            dill.dump(obj, filepath)
-
+def model_metrics(Actual, predicted):
+    try :
+        mae = mean_absolute_error(Actual, predicted)
+        mse = mean_squared_error(Actual, predicted)
+        rmse = np.sqrt(mse)
+        r2_square = r2_score(Actual, predicted)
+        return mse, mae, rmse, r2_square
     except Exception as e:
-        raise CustomException (e, sys) 
-
-def load_pfile(file_path):
-    try:
-        with open(file_path, "rb") as file_obj:
-            return pickle.load(file_obj)
-    except Exception as e:
-        raise CustomException(e, sys) 
+        logging.info('Exception Occured while evaluating metric')
+        raise CustomException(e,sys)

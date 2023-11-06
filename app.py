@@ -6,7 +6,7 @@ from flask import Flask, request, app, jsonify, url_for, render_template
 import numpy as np
 import pandas as pd
 #from waitress import serve
-from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+from src.pipeline.predict_pipeline import CustomData, PredictPipeline, CustomData_for_GT
 
 
 app = Flask(__name__)
@@ -51,9 +51,31 @@ def predict_datapoint():
         )
         pred_df = data.get_data_as_data_frame()
         predpipeline = PredictPipeline()
-        result = predpipeline.predict(pred_df)
+        result = predpipeline.stu_predict(pred_df)
         return render_template('index.html', results = result[0])
     
+@app.route('/prdictprice', methods = ['GET', 'POST'])
+def predict_pricepoint():
+    if request.method == 'GET':
+        return render_template('indexx.html')
+    else:
+        #carat,cut,color,clarity,depth,table,x,y,z,price
+        data = CustomData_for_GT(
+            carat = float(request.form.get('carat')),
+            depth = float(request.form.get('depth')),
+            table = float(request.form.get('table')),
+            x = float(request.form.get('x')),
+            y = float(request.form.get('y')),
+            z = float(request.form.get('z')),
+            cut = request.form.get('cut'),
+            color = request.form.get('color'),
+            clarity = request.form.get('clarity')
+        )
+        newdf = data.get_GT_dataframe()
+        pipe = PredictPipeline()
+        result = pipe.GT_predict(newdf)
+        return render_template('indexx.html', results = result[0])
+
 
 if __name__=="__main__":
     app.run(debug=True)
